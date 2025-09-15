@@ -1,103 +1,384 @@
-import Image from "next/image";
+'use client';
+
+import { useState } from 'react';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [activeTab, setActiveTab] = useState('home');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const skillsData = [
+    { name: 'Netzwerkinfrastruktur', level: 90 },
+    { name: 'Server Administration', level: 85 },
+    { name: 'Virtualisierung', level: 80 },
+    { name: 'Cloud Lösungen', level: 75 },
+    { name: 'IT-Sicherheit', level: 85 },
+    { name: 'Datenbanken', level: 70 },
+  ];
+
+  const projectsData = [
+    {
+      title: 'Unternehmensnetzwerk Modernisierung',
+      description: 'Planung und Implementierung einer komplett neuen Netzwerkinfrastruktur für ein mittelständisches Unternehmen.',
+      technologies: ['Cisco', 'VLAN', 'Firewall', 'WiFi 6']
+    },
+    {
+      title: 'Server Migration zu Azure',
+      description: 'Migration von On-Premise Servern in die Microsoft Azure Cloud mit minimaler Downtime.',
+      technologies: ['Azure', 'PowerShell', 'Active Directory']
+    },
+    {
+      title: 'Virtualisierungslösung mit VMware',
+      description: 'Implementierung einer Virtualisierungsumgebung zur Konsolidierung der Serverlandschaft.',
+      technologies: ['VMware', 'vSphere', 'SAN Storage']
+    }
+  ];
+
+  const experienceData = [
+    {
+      role: 'Senior IT-Systemintegrator',
+      company: 'TechSolutions GmbH',
+      period: '2020 - Heute',
+      description: 'Verantwortlich für die Planung und Implementierung von IT-Infrastrukturlösungen für Unternehmenskunden.'
+    },
+    {
+      role: 'IT-Systemadministrator',
+      company: 'DataNet AG',
+      period: '2016 - 2020',
+      description: 'Administration von Serverumgebungen und Unterstützung bei IT-Projekten.'
+    },
+    {
+      role: 'IT-Auszubildender',
+      company: 'Systemhaus Müller',
+      period: '2013 - 2016',
+      description: 'Ausbildung zum Fachinformatiker für Systemintegration.'
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-green-900 to-blue-900 text-white overflow-x-hidden">
+      {/* Partikel-Hintergrund */}
+      <div className="fixed inset-0 z-0 opacity-30">
+        {[...Array(50)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full bg-cyan-500 animate-pulse"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              width: `${Math.random() * 10 + 2}px`,
+              height: `${Math.random() * 10 + 2}px`,
+              animationDuration: `${Math.random() * 5 + 3}s`,
+              animationDelay: `${Math.random() * 2}s`,
+              opacity: Math.random() * 0.5 + 0.1,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Netzwerk-Linien Hintergrund */}
+      <div className="fixed inset-0 z-0 opacity-20">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+              <path d="M 50 0 L 0 0 0 50" fill="none" stroke="cyan" strokeWidth="0.5" opacity="0.3"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+      </div>
+
+      {/* Hauptcontainer */}
+      <div className="relative z-10 container mx-auto px-4 py-8">
+        {/* Navigation */}
+        <nav className="flex justify-between items-center py-6 mb-12 border-b border-cyan-500/30">
+          <div className="text-2xl font-bold">
+            <span className="text-cyan-400">Timo</span>
+            <span className="text-emerald-400"> Bösch</span>
+          </div>
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex space-x-2 bg-gray-800/50 p-1 rounded-lg backdrop-blur-sm">
+            {['home', 'skills', 'projects', 'experience', 'contact'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
+                  activeTab === tab
+                    ? 'bg-gradient-to-r from-cyan-600 to-emerald-600 text-white shadow-lg'
+                    : 'text-gray-400 hover:text-cyan-300 hover:bg-gray-700/50'
+                }`}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
+          </div>
+
+          {/* Mobile Navigation Button */}
+          <button 
+            className="md:hidden text-cyan-400"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+          </button>
+        </nav>
+
+        {/* Mobile Navigation Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden mb-8 bg-gray-800/50 p-4 rounded-lg backdrop-blur-sm">
+            <div className="flex flex-col space-y-2">
+              {['home', 'skills', 'projects', 'experience', 'contact'].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => {
+                    setActiveTab(tab);
+                    setIsMenuOpen(false);
+                  }}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
+                    activeTab === tab
+                      ? 'bg-gradient-to-r from-cyan-600 to-emerald-600 text-white shadow-lg'
+                      : 'text-gray-400 hover:text-cyan-300 hover:bg-gray-700/50'
+                  }`}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Home Bereich */}
+        {activeTab === 'home' && (
+          <section className="mb-20 text-center">
+            <div className="inline-block p-2 mb-6 rounded-full bg-cyan-900/20 border border-cyan-500/30">
+              <div className="flex items-center text-cyan-400 text-sm">
+                <span className="h-2 w-2 rounded-full bg-cyan-400 mr-2 animate-pulse"></span>
+                IT-Systemintegrator
+              </div>
+            </div>
+            
+            <h1 className="text-5xl md:text-7xl font-bold mb-6">
+              <span className="text-cyan-300">Timo</span>
+              <span className="text-emerald-300"> Bösch</span>
+            </h1>
+            
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10">
+              Ich integriere, konfiguriere und optimiere IT-Systeme für maximale Leistung und Effizienz.
+            </p>
+            
+            <div className="flex flex-wrap justify-center gap-4">
+              <button 
+                onClick={() => setActiveTab('contact')}
+                className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-cyan-800 rounded-lg font-medium text-white hover:from-cyan-500 hover:to-cyan-700 transition-all duration-300 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 flex items-center"
+              >
+                <span className="mr-2">📧</span> Kontakt aufnehmen
+              </button>
+              <button className="px-6 py-3 bg-gray-800/50 border border-cyan-500/30 rounded-lg font-medium text-white hover:bg-gray-700/50 transition-all duration-300 flex items-center">
+                <span className="mr-2">📄</span> Lebenslauf ansehen
+              </button>
+            </div>
+          </section>
+        )}
+
+        {/* Skills Bereich */}
+        {activeTab === 'skills' && (
+          <section className="mb-20">
+            <h2 className="text-3xl font-bold text-center mb-4">Meine Fähigkeiten</h2>
+            <p className="text-gray-300 text-center mb-12 max-w-2xl mx-auto">
+              Umfassende Expertise in der Integration und Administration von IT-Systemen
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              {skillsData.map((skill, index) => (
+                <div key={index} className="bg-gray-800/30 p-6 rounded-xl border border-cyan-500/20 backdrop-blur-sm">
+                  <div className="flex justify-between mb-2">
+                    <span className="font-medium text-cyan-300">{skill.name}</span>
+                    <span className="text-emerald-400">{skill.level}%</span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-2.5">
+                    <div 
+                      className="bg-gradient-to-r from-cyan-600 to-emerald-600 h-2.5 rounded-full" 
+                      style={{ width: `${skill.level}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 text-center max-w-4xl mx-auto">
+              <div className="bg-gray-800/30 p-4 rounded-xl border border-cyan-500/20 backdrop-blur-sm">
+                <div className="text-4xl font-bold text-cyan-400">50+</div>
+                <div className="text-gray-300 mt-2">Projekte</div>
+              </div>
+              <div className="bg-gray-800/30 p-4 rounded-xl border border-cyan-500/20 backdrop-blur-sm">
+                <div className="text-4xl font-bold text-emerald-400">8+</div>
+                <div className="text-gray-300 mt-2">Jahre Erfahrung</div>
+              </div>
+              <div className="bg-gray-800/30 p-4 rounded-xl border border-cyan-500/20 backdrop-blur-sm">
+                <div className="text-4xl font-bold text-cyan-400">25+</div>
+                <div className="text-gray-300 mt-2">Zufriedene Kunden</div>
+              </div>
+              <div className="bg-gray-800/30 p-4 rounded-xl border border-cyan-500/20 backdrop-blur-sm">
+                <div className="text-4xl font-bold text-emerald-400">12</div>
+                <div className="text-gray-300 mt-2">Zertifizierungen</div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Projects Bereich */}
+        {activeTab === 'projects' && (
+          <section className="mb-20">
+            <h2 className="text-3xl font-bold text-center mb-4">Projekte</h2>
+            <p className="text-gray-300 text-center mb-12 max-w-2xl mx-auto">
+              Eine Auswahl meiner erfolgreichsten IT-Integrationsprojekte
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projectsData.map((project, index) => (
+                <div key={index} className="bg-gray-800/30 p-6 rounded-xl border border-cyan-500/20 backdrop-blur-sm hover:border-cyan-500/40 transition-all duration-300">
+                  <h3 className="text-xl font-bold text-cyan-300 mb-3">{project.title}</h3>
+                  <p className="text-gray-300 mb-4">{project.description}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.technologies.map((tech, i) => (
+                      <span key={i} className="px-3 py-1 bg-cyan-900/40 text-cyan-300 rounded-full text-sm">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Experience Bereich */}
+        {activeTab === 'experience' && (
+          <section className="mb-20">
+            <h2 className="text-3xl font-bold text-center mb-4">Berufserfahrung</h2>
+            <p className="text-gray-300 text-center mb-12 max-w-2xl mx-auto">
+              Meine berufliche Entwicklung im Bereich IT-Systemintegration
+            </p>
+            
+            <div className="max-w-3xl mx-auto">
+              {experienceData.map((exp, index) => (
+                <div key={index} className="mb-10 relative pl-10 before:content-[''] before:absolute before:left-0 before:top-2 before:h-4 before:w-4 before:rounded-full before:bg-cyan-500 before:z-10 after:content-[''] after:absolute after:left-2 after:top-2 after:h-full after:w-0.5 after:bg-gradient-to-b after:from-cyan-500 after:to-cyan-900">
+                  <h3 className="text-xl font-bold text-cyan-300">{exp.role}</h3>
+                  <div className="flex flex-col md:flex-row md:items-center text-gray-400 mb-2">
+                    <span className="font-medium">{exp.company}</span>
+                    <span className="hidden md:block mx-2">•</span>
+                    <span>{exp.period}</span>
+                  </div>
+                  <p className="text-gray-300">{exp.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Contact Bereich */}
+        {activeTab === 'contact' && (
+          <section className="mb-20">
+            <h2 className="text-3xl font-bold text-center mb-4">Kontakt</h2>
+            <p className="text-gray-300 text-center mb-12 max-w-2xl mx-auto">
+              Treten Sie mit mir in Kontakt für Ihr nächstes IT-Projekt
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
+              <div className="bg-gray-800/30 p-8 rounded-xl border border-cyan-500/20 backdrop-blur-sm">
+                <h3 className="text-xl font-bold text-cyan-300 mb-6">Kontaktinformationen</h3>
+                
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <div className="bg-cyan-900/30 p-2 rounded-lg mr-4">
+                      <span className="text-cyan-400">📧</span>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-200">E-Mail</h4>
+                      <p className="text-gray-400">timo.boesch@example.com</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <div className="bg-cyan-900/30 p-2 rounded-lg mr-4">
+                      <span className="text-cyan-400">📱</span>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-200">Telefon</h4>
+                      <p className="text-gray-400">+49 123 456 789</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start">
+                    <div className="bg-cyan-900/30 p-2 rounded-lg mr-4">
+                      <span className="text-cyan-400">📍</span>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-200">Standort</h4>
+                      <p className="text-gray-400">München, Deutschland</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-8 pt-6 border-t border-cyan-500/20">
+                  <h4 className="font-medium text-gray-200 mb-4">Soziale Netzwerke</h4>
+                  <div className="flex space-x-4">
+                    <a href="#" className="bg-cyan-900/30 p-3 rounded-lg text-cyan-400 hover:bg-cyan-900/50 transition-colors">LinkedIn</a>
+                    <a href="#" className="bg-cyan-900/30 p-3 rounded-lg text-cyan-400 hover:bg-cyan-900/50 transition-colors">Xing</a>
+                    <a href="#" className="bg-cyan-900/30 p-3 rounded-lg text-cyan-400 hover:bg-cyan-900/50 transition-colors">GitHub</a>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-gray-800/30 p-8 rounded-xl border border-cyan-500/20 backdrop-blur-sm">
+                <h3 className="text-xl font-bold text-cyan-300 mb-6">Nachricht senden</h3>
+                
+                <form className="space-y-4">
+                  <div>
+                    <label htmlFor="name" className="block text-gray-300 mb-2">Name</label>
+                    <input 
+                      type="text" 
+                      id="name" 
+                      className="w-full bg-gray-700/50 border border-cyan-500/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="email" className="block text-gray-300 mb-2">E-Mail</label>
+                    <input 
+                      type="email" 
+                      id="email" 
+                      className="w-full bg-gray-700/50 border border-cyan-500/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="message" className="block text-gray-300 mb-2">Nachricht</label>
+                    <textarea 
+                      id="message" 
+                      rows={4}
+                      className="w-full bg-gray-700/50 border border-cyan-500/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    ></textarea>
+                  </div>
+                  
+                  <button 
+                    type="submit"
+                    className="w-full px-6 py-3 bg-gradient-to-r from-cyan-600 to-emerald-600 rounded-lg font-medium text-white hover:from-cyan-500 hover:to-emerald-500 transition-all duration-300 shadow-lg shadow-cyan-500/20"
+                  >
+                    Nachricht senden
+                  </button>
+                </form>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Footer */}
+        <footer className="mt-20 pt-10 border-t border-cyan-500/30 text-center text-gray-400">
+          <p>© {new Date().getFullYear()} Timo Bösch. Alle Rechte vorbehalten.</p>
+        </footer>
+      </div>
     </div>
   );
 }
